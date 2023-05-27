@@ -63,7 +63,7 @@ export function PDFView() {
           <View style={styles.viewParent}>
             <Text style={styles.textTitle}>{snap.title}</Text>
             {snap.transcript.map((transcript: any) => (
-              <View style={styles.viewChild}>
+              <View key={transcript.time} style={styles.viewChild}>
                 <Text style={styles.textTime}>
                   {Math.floor(transcript.time / (1000 * 60))
                     .toString()
