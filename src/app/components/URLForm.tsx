@@ -1,15 +1,15 @@
 "use client";
 
-import React, { FormEvent } from "react";
+import React from "react";
 import * as Form from "@radix-ui/react-form";
+import axios from "axios";
 import { useSnapshot } from "valtio";
 import { state, updateStep, updateTitle, updateTranscript, updateUrl } from "../stores";
-import axios from "axios";
 
 export function URLForm() {
   const snap = useSnapshot(state);
 
-  const generatePdf = async (url: string) => {
+  const generateTranscript = async (url: string) => {
     try {
       const res = await axios.post("/api/transcript", { url });
       updateTitle(res.data.title);
@@ -23,125 +23,48 @@ export function URLForm() {
   if (snap.step !== 0) return null;
 
   return (
-    <Form.Root
-      className="FormRoot"
-      onSubmit={(e) => {
-        e.preventDefault();
-        generatePdf(state.url);
-      }}
-    >
-      <Form.Field className="FormField" name="url">
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-          <Form.Label className="FormLabel">Please enter a TED URL</Form.Label>
-          <Form.Message match={(value) => !value}>Please enter a TED URL</Form.Message>
-          <Form.Message match={(value) => !value.startsWith("https://www.ted.com/talks/")}>
-            Please enter a TED URL starting with https://www.ted.com/talks/
-          </Form.Message>
-        </div>
-        <Form.Control asChild>
-          <input onChange={(e) => updateUrl(e.target.value)} className="Input" type="text" required />
-        </Form.Control>
-      </Form.Field>
-      <Form.Submit asChild>
-        <button className="Button" style={{ marginTop: 10 }}>
-          Create PDF
-        </button>
-      </Form.Submit>
-    </Form.Root>
+    <>
+      <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+        Effortlessly Convert TED Transcripts to PDF!
+      </h1>
+      <Form.Root
+        className="w-5/6 lg:w-1/2 mt-8 mx-auto"
+        onSubmit={(e) => {
+          e.preventDefault();
+          generateTranscript(state.url);
+        }}
+      >
+        <Form.Field className="" name="url">
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+            <Form.Label className="block font-medium text-sm text-gray-200">Please enter a TED URL</Form.Label>
+            <Form.Message match={(value) => !value} className="block font-medium text-sm text-gray-200">
+              Please enter a TED URL
+            </Form.Message>
+            <Form.Message
+              match={(value) => !value.startsWith("https://www.ted.com/talks/")}
+              className="block font-medium text-sm text-gray-200"
+            >
+              Please enter a TED URL starting with https://www.ted.com/talks/
+            </Form.Message>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-0 lg:grid-cols-4 lg:gap-4">
+            <Form.Control asChild className="col-span-1 lg:col-span-3 rounded-md shadow-sm relative">
+              <input
+                onChange={(e) => updateUrl(e.target.value)}
+                type="text"
+                required
+                className="block w-full px-4 py-4 text-sm lg:text-base text-gray-800 leading-4 border-0 rounded-md placeholder:text-gray-400"
+                placeholder="https://www.ted.com/talks/..."
+              />
+            </Form.Control>
+            <Form.Submit asChild className="mt-4 lg:mt-0 col-span-1 lg:col-span-1">
+              <button className="block px-4 py-4 text-sm lg:text-base text-gray-200 hover:text-gray-800 leading-4 bg-transparent hover:bg-gray-200 border border-gray-200 rounded-md cursor-pointer ease-out duration-200">
+                Convert PDF
+              </button>
+            </Form.Submit>
+          </div>
+        </Form.Field>
+      </Form.Root>
+    </>
   );
 }
-
-// @import '@radix-ui/colors/blackA.css';
-// @import '@radix-ui/colors/violet.css';
-// @import '@radix-ui/colors/mauve.css';
-
-// /* reset */
-// input,
-// textarea,
-// button {
-//   all: unset;
-//   box-sizing: border-box;
-// }
-
-// .FormRoot {
-//   width: 260px;
-// }
-
-// .FormField {
-//   display: grid;
-//   margin-bottom: 10px;
-// }
-
-// .FormLabel {
-//   font-size: 15px;
-//   font-weight: 500;
-//   line-height: 35px;
-//   color: white;
-// }
-
-// .FormMessage {
-//   font-size: 13px;
-//   color: white;
-//   opacity: 0.8;
-// }
-
-// .Input,
-// .Textarea {
-//   width: 100%;
-//   display: inline-flex;
-//   align-items: center;
-//   justify-content: center;
-//   border-radius: 4px;
-
-//   font-size: 15px;
-//   color: white;
-//   background-color: var(--blackA5);
-//   box-shadow: 0 0 0 1px var(--blackA9);
-// }
-// .Input:hover,
-// .Textarea:hover {
-//   box-shadow: 0 0 0 1px black;
-// }
-// .Input:focus,
-// .Textarea:focus {
-//   box-shadow: 0 0 0 2px black;
-// }
-// .Input::selection,
-// .Textarea::selection {
-//   background-color: var(--blackA9);
-//   color: white;
-// }
-
-// .Input {
-//   padding: 0 10px;
-//   height: 35px;
-//   line-height: 1;
-// }
-
-// .Textarea {
-//   resize: none;
-//   padding: 10px;
-// }
-
-// .Button {
-//   display: inline-flex;
-//   align-items: center;
-//   justify-content: center;
-//   border-radius: 4px;
-//   padding: 0 15px;
-//   font-size: 15px;
-//   line-height: 1;
-//   font-weight: 500;
-//   height: 35px;
-//   width: 100%;
-
-//   background-color: white;
-//   color: var(--violet11);
-//   box-shadow: 0 2px 10px var(--blackA7);
-// }
-// .Button:hover {
-//   background-color: var(--mauve3);
-// }
-// .Button:focus {
-//   box-shadow: 0 0 0 2px black;
-// }
