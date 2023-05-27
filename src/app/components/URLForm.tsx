@@ -3,26 +3,18 @@
 import React, { FormEvent } from "react";
 import * as Form from "@radix-ui/react-form";
 import { useSnapshot } from "valtio";
-import { state, updateStep, updateUrl } from "../stores";
+import { state, updateStep, updateTitle, updateTranscript, updateUrl } from "../stores";
 import axios from "axios";
 
 export function URLForm() {
   const snap = useSnapshot(state);
 
   const generatePdf = async (url: string) => {
-    console.log(url);
     try {
-      const res = await axios.post("/api/test", { url });
-      const element = document.createElement("div");
-      element.innerHTML = res.data.transcript;
-      console.log(element.textContent);
-      // const blob = new Blob([response.data], { type: "application/pdf" });
-      // const blobUrl = URL.createObjectURL(blob);
-      // const a = document.createElement("a");
-      // a.href = blobUrl;
-      // a.download = "converted.pdf";
-      // a.click();
-      // URL.revokeObjectURL(blobUrl);
+      const res = await axios.post("/api/transcript", { url });
+      updateTitle(res.data.title);
+      updateTranscript(res.data.transcript);
+      updateStep(1);
     } catch (error) {
       console.error("Error converting URL to PDF:", error);
     }
@@ -42,9 +34,9 @@ export function URLForm() {
       <Form.Field className="FormField" name="url">
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
           <Form.Label className="FormLabel">url</Form.Label>
-          <Form.Message match={(value) => !value}>Please enter url.</Form.Message>
+          <Form.Message match={(value) => !value}>Please enter a URL</Form.Message>
           <Form.Message match={(value) => !value.startsWith("https://www.ted.com/talks/")}>
-            Please enter TED url.
+            Please enter a URL starting with https://www.ted.com/talks/
           </Form.Message>
         </div>
         <Form.Control asChild>
