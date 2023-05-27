@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>{/* <style id="stitches" dangerouslySetInnerHTML={{ __html: getCssText() }} /> */}</head>
+      {/* <head><style id="stitches" dangerouslySetInnerHTML={{ __html: getCssText() }} /></head> */}
       <body className={inter.className}>
         {children}
         {/* {globalStyles()} */}
