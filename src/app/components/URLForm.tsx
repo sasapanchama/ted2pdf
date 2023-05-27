@@ -28,15 +28,14 @@ export function URLForm() {
       onSubmit={(e) => {
         e.preventDefault();
         generatePdf(state.url);
-        updateStep(1);
       }}
     >
       <Form.Field className="FormField" name="url">
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-          <Form.Label className="FormLabel">url</Form.Label>
-          <Form.Message match={(value) => !value}>Please enter a URL</Form.Message>
+          <Form.Label className="FormLabel">Please enter a TED URL</Form.Label>
+          <Form.Message match={(value) => !value}>Please enter a TED URL</Form.Message>
           <Form.Message match={(value) => !value.startsWith("https://www.ted.com/talks/")}>
-            Please enter a URL starting with https://www.ted.com/talks/
+            Please enter a TED URL starting with https://www.ted.com/talks/
           </Form.Message>
         </div>
         <Form.Control asChild>
@@ -45,7 +44,7 @@ export function URLForm() {
       </Form.Field>
       <Form.Submit asChild>
         <button className="Button" style={{ marginTop: 10 }}>
-          Post question
+          Create PDF
         </button>
       </Form.Submit>
     </Form.Root>
